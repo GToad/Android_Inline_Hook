@@ -1,5 +1,7 @@
 #include "fixPCOpcode.h"
 
+//这里的代码建议看文章：《Android Inline Hook中的指令修复详解》（https://gtoad.github.io/2018/07/13/Android-Inline-Hook-Fix/）
+
 enum INSTRUCTION_TYPE {
 	// B <label>
 	B1_THUMB16,

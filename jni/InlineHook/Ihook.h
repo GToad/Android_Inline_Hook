@@ -15,7 +15,7 @@
 #define BYTE unsigned char
 #endif
 
-#define OPCODEMAXLEN 12      //inline hook所需要的opcodes最大长度,arm为8，thumb为12（因为要补一个nop），所以这里取12，当arm的时候只memcpy 8btye就行了
+#define OPCODEMAXLEN 12      //inline hook所需要的opcodes最大长度,arm为8，thumb为12/10（因为要补一个nop），所以这里取12，当arm的时候只memcpy 8btye就行了
 #define BACKUP_CODE_NUM_MAX 10  //尽管备份指令最多的可能是thumb-2下的6条thumb16，但是为了保险起见选择了10。
 
 #define LOG_TAG "GToad"

@@ -450,7 +450,6 @@ bool BuildOldFunction(INLINE_HOOK_INFO* pstInlineHook)
             break;
         }
         
-        //这里是没有修复指令，直接拷贝即可，后续读者可以在这里位置增加指令修复功能
         fixLength = fixPCOpcodeArm(fixOpcodes, pstInlineHook); //把第三部分的起始地址传过去
         memcpy(pNewEntryForOldFunction, fixOpcodes, fixLength);
         //memcpy(pNewEntryForOldFunction, pstInlineHook->szbyBackupOpcodes, 8);
@@ -513,7 +512,6 @@ bool BuildOldFunctionThumb(INLINE_HOOK_INFO* pstInlineHook)
             break;
         }
         
-        //这里是没有修复指令，直接拷贝即可，后续读者可以在这里位置增加指令修复功能
         fixLength = fixPCOpcodeThumb(fixOpcodes, pstInlineHook); //修复PC相关指令
         //返回修复后opcode的指令长度，修复后的指令保存在fixOpcode中
         memcpy(pNewEntryForOldFunction, fixOpcodes, fixLength);
@@ -612,14 +610,14 @@ bool HookArm(INLINE_HOOK_INFO* pstInlineHook)
     
     while(1)
     {
-        LOGI("pstInlineHook is null 1.");
+        //LOGI("pstInlineHook is null 1.");
         if(pstInlineHook == NULL)
         {
             LOGI("pstInlineHook is null.");
             break;
         }
 
-        LOGI("Init Arm HookInfo fail 1.");
+        //LOGI("Init Arm HookInfo fail 1.");
         //设置ARM下inline hook的基础信息
         if(InitArmHookInfo(pstInlineHook) == false)
         {
@@ -627,7 +625,7 @@ bool HookArm(INLINE_HOOK_INFO* pstInlineHook)
             break;
         }
         
-        LOGI("BuildStub fail 1.");
+        //LOGI("BuildStub fail 1.");
         //构造stub，功能是保存寄存器状态，同时跳转到目标函数，然后跳转回原函数
         //需要目标地址，返回stub地址，同时还有old指针给后续填充 
         if(BuildStub(pstInlineHook) == false)
@@ -636,7 +634,7 @@ bool HookArm(INLINE_HOOK_INFO* pstInlineHook)
             break;
         }
         
-        LOGI("BuildOldFunction fail 1.");
+        //LOGI("BuildOldFunction fail 1.");
         //负责重构原函数头，功能是修复指令，构造跳转回到原地址下
         //需要原函数地址
         if(BuildOldFunction(pstInlineHook) == false)
@@ -645,7 +643,7 @@ bool HookArm(INLINE_HOOK_INFO* pstInlineHook)
             break;
         }
         
-        LOGI("RebuildHookAddress fail 1.");
+        //LOGI("RebuildHookAddress fail 1.");
         //负责重写原函数头，功能是实现inline hook的最后一步，改写跳转
         //需要cacheflush，防止崩溃
         if(RebuildHookTarget(pstInlineHook) == false)
@@ -672,14 +670,14 @@ bool HookThumb(INLINE_HOOK_INFO* pstInlineHook)
     
     while(1)
     {
-        LOGI("pstInlineHook is null 1.");
+        //LOGI("pstInlineHook is null 1.");
         if(pstInlineHook == NULL)
         {
             LOGI("pstInlineHook is null.");
             break;
         }
 
-        LOGI("Init Thumb HookInfo fail 1.");
+        //LOGI("Init Thumb HookInfo fail 1.");
         //设置ARM下inline hook的基础信息
         if(InitThumbHookInfo(pstInlineHook) == false)
         {
@@ -687,7 +685,7 @@ bool HookThumb(INLINE_HOOK_INFO* pstInlineHook)
             break;
         }
         
-        LOGI("BuildStub fail 1.");
+        //LOGI("BuildStub fail 1.");
         //构造stub，功能是保存寄存器状态，同时跳转到目标函数，然后跳转回原函数
         //需要目标地址，返回stub地址，同时还有old指针给后续填充 
         if(BuildStubThumb(pstInlineHook) == false)
@@ -696,7 +694,7 @@ bool HookThumb(INLINE_HOOK_INFO* pstInlineHook)
             break;
         }
         
-        LOGI("BuildOldFunction fail 1.");
+        //LOGI("BuildOldFunction fail 1.");
         //负责重构原函数头，功能是修复指令，构造跳转回到原地址下
         //需要原函数地址
         if(BuildOldFunctionThumb(pstInlineHook) == false)
@@ -705,7 +703,7 @@ bool HookThumb(INLINE_HOOK_INFO* pstInlineHook)
             break;
         }
         
-        LOGI("RebuildHookAddress fail 1.");
+        //LOGI("RebuildHookAddress fail 1.");
         //负责重写原函数头，功能是实现inline hook的最后一步，改写跳转
         //需要cacheflush，防止崩溃
         if(RebuildHookTargetThumb(pstInlineHook) == false)

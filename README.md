@@ -31,7 +31,13 @@ I've make some examples in other repo, it includes code and the target APK file.
 
 # Contact
 
-I believe that this project still has some problems. If you find some bugs or have some problems, you can send e-mail to `chenjiahao@sjtu.edu.cn`. I wish we can fix it together!
+I believe that this project still has some problems. If you find some bugs or have some problems, you can send e-mail to `gtoad1994@aliyun.com`. I wish we can fix it together!
+
+# Reference
+
+[Game Security Lab of Tencent](http://gslab.qq.com/portal.php?mod=view&aid=168)
+
+[Ele7enxxh's Blog](http://ele7enxxh.com/Android-Arm-Inline-Hook.html)
 
 
 
