@@ -1,0 +1,75 @@
+需要考虑条件b指令在第一条还是第二条
+
+第一条的情况下：
+BLS 16 //9a000002
+指令2
+LDR PC, ADR1
+ADR1 = HOOK_ADDR+8
+LDR PC, ADR2
+ADR2 = X*4 + 8 + HOOK_ADDR
+
+第二条的情况下：
+BLS 12 //9A000001
+LDR PC, ADR1
+ADR1 = HOOK_ADDR+8
+LDR PC, ADR2
+ADR2 = X*4 + 12 +HOOK_ADDR
+
+先查arm32指令形式
+然后观察下面这些，看看到底是哪里不一样，因为如果真的只是看CSPR标志位的话，它们这些应该都一样的，：
+b 12
+blx 12
+
+beq 12
+bne 12
+bcs/hs 12
+bcc/lo 12
+......
+
+最后看看能不能按上述计划来fix吧
+
+BEQ BNE
+BNE BEQ
+BCS BCC
+BCC BCS
+BMI BPL
+BPL BMI
+BVS BVC
+BVC BVS
+BHI BLS
+BLS BHI
+BGE BLT
+BLT BGE
+BGT BLE
+BLE BGT
+BAL X
+
+
+
+不区分第一第二条指令：
+BLS 12 //9a000001
+LDR PC, ADR1
+ADR1 = ORIGIN_TARGET
+备份指令
+
+thumb16
+BLS 12
+nop
+LDR。w PC,ADR1
+ADR1
+备份指令
+
+thumb32
+BLS.W 12
+LDR.W PC, ADR1
+ADR1
+备份指令
+
+
+
+
+
+
+
+
+
