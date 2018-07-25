@@ -116,7 +116,7 @@ bool UnInlineHook(void *pHookAddr)
  * 这里将R0寄存器锁定为0x333，一个远大于30的值
  * @param regs 寄存器结构，保存寄存器当前hook点的寄存器信息
  */
-void EvilHookStubFunctionForIBored(pt_regs *regs)
+void EvilHookStubFunctionForIBored(pt_regs *regs) //参数regs就是指向栈上的一个数据结构，由第二部分的mov r0, sp所传递。
 {
     LOGI("In Evil Hook Stub.");
     //regs->uregs[2] = 0x333; //regs->uregs[0]=0x333
