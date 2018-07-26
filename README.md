@@ -4,7 +4,7 @@ This project make an Android .so file that can automatically do some native hook
 
 It mainly use Android Inline Hook, not PLT Hook.
 
-If you can read Chinese or wanna see more picture, I've wrote some articles about this repo and the first one is the main article.
+If you can read Chinese or wanna see more picture, I've wrote some articles about this repo and the first one is the main article. `I highly recommend you to read the articles before reading the code.` These article will save you a lot of time, I promise.
 
 1. [Android Inline Hook Practice](https://gtoad.github.io/2018/07/06/Android-Native-Hook-Practice/)
 2. [Opcode Fix In Android Inline Hook](https://gtoad.github.io/2018/07/13/Android-Inline-Hook-Fix/)
@@ -21,6 +21,8 @@ You can name the `__attribute__((constructor)) ModifyIBored()` function at your 
 3. `is_target_thumb` shows the hook point's CPU mode. You can know this information in the work of reversing before the hook work.
 
 `EvilHookStubFunctionForIBored` function is the thing you really wanna do when the hook works. You can name at your will, but keep the arg `(pt_regs *regs)`. It brings you the power to control the registers, like set r0 to 0x333 : `regs->uregs[0]=0x333;`.
+
+After you finish the args above, just `ndk-build` and you will get your .so file.
 
 # Example
 
