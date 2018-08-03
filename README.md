@@ -12,7 +12,7 @@ If you can read Chinese or wanna see more picture, I've wrote some articles abou
 
 # Articles in English
 
-I've received several e-mails and all the questions in them have been written in the articles Chinese. So i think it's necessary translate some part of the articles in English. I will try my best to tanslate more part and the parts metioned by the questions in issue will have high priority.
+I've received several e-mails and all the questions in them have been written in the Chinese articles. So i think it's necessary translate some part of the articles in English. I will try my best to tanslate more part and the parts metioned by the questions in issue will have high priority.
 
 1. [Android Inline Hook Practice EN](https://gtoad.github.io/2018/08/03/Android-Native-Hook-Practice-EN/)
 
