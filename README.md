@@ -37,6 +37,10 @@ I've make some examples in other repo, it includes code and the target APK file.
 1. [thumb-2 example](https://github.com/GToad/Android_Inline_Hook_Thumb_Example.git)
 2. [arm32 example](https://github.com/GToad/Android_Inline_Hook_Arm_Example.git)
 
+# ARM64
+
+Start to working. So the code in ./arm64 has not finished yet.
+
 # Contact
 
 I believe that this project still has some problems. If you find some bugs or have some problems, you can send e-mail to `gtoad1994@aliyun.com`. I wish we can fix it together!
