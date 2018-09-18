@@ -211,17 +211,19 @@ bool BuildArmJumpCode(void *pCurAddress , void *pJumpAddress)
         //缓存构造好的跳转指令（ARM下32位，两条指令只需要8个bytes）
         //BYTE szLdrPCOpcodes[8] = {0x04, 0xF0, 0x1F, 0xE5};
 
-        //STP X17, X18, [SP]
-        //LDR X17, 4
-        //BR X17
+        //STP X1, X0, [SP, #-0x10]
+        //LDR X0, 4
+        //BR X0
         //ADDR(64)
-        BYTE szbyBackupOpcodes[20] = {0xf1, 0x4b, 0x00, 0xa9, 0x31, 0x00, 0x00, 0x58, 0x20, 0x02, 0x1f, 0xd6};
+        BYTE szLdrPCOpcodes[20] = {0xe1, 0x03, 0x3f, 0xa9, 0x20, 0x00, 0x00, 0x58, 0x00, 0x00, 0x1f, 0xd6};
         //将目的地址拷贝到跳转指令缓存位置
         memcpy(szLdrPCOpcodes + 12, &pJumpAddress, 8);
         
         //将构造好的跳转指令刷进去
         memcpy(pCurAddress, szLdrPCOpcodes, 20);
-        cacheflush(*((uint32_t*)pCurAddress), 20, 0);
+        //__flush_cache(*((uint32_t*)pCurAddress), 20);
+        __builtin___clear_cache (*((uint64_t*)pCurAddress), *((uint64_t*)(pCurAddress+20)));
+        //cacheflush(*((uint32_t*)pCurAddress), 20, 0);
         
         bRet = true;
         break;

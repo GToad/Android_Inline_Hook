@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <sys/ptrace.h>
 #include <stdbool.h>
+//#include <cacheflush.h>
+
 
 #ifndef BYTE
 #define BYTE unsigned char
@@ -29,6 +31,8 @@
 #define ACTION_ENABLE	0
 #define ACTION_DISABLE	1
 
+//#define __flush_cache(c, n)        __builtin___clear_cache(reinterpret_cast<char *>(c), reinterpret_cast<char *>(c) + n)
+
 extern unsigned long _shellcode_start_s;
 extern unsigned long _shellcode_end_s;
 extern unsigned long _hookstub_function_addr_s;
@@ -42,7 +46,7 @@ extern unsigned long _old_function_addr_s_thumb;
 typedef struct tagINLINEHOOKINFO{
     void *pHookAddr;                //hook的地址
     void *pStubShellCodeAddr;            //跳过去的shellcode stub的地址
-    void (*onCallBack)(struct pt_regs *);       //回调函数，跳转过去的函数地址
+    void (*onCallBack)(struct user_pt_regs *);       //回调函数，跳转过去的函数地址
     void ** ppOldFuncAddr;             //shellcode 中存放old function的地址
     BYTE szbyBackupOpcodes[OPCODEMAXLEN];    //原来的opcodes
     int backUpLength; //备份代码的长度，arm64模式下为20

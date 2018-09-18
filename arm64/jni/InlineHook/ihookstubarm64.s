@@ -7,21 +7,22 @@
 
 _shellcode_start_s:
     //push    {r0, r1, r2, r3}
+    //ldr     x0, [sp, #-0x8]
     add     sp, sp, #0x20
-    stp     X0, X1, [SP]
-    stp     X2, X3, [SP,#0x10]
+    //stp     X0, X1, [SP]
+    //stp     X2, X3, [SP,#0x10]
     //stp     X4, X5, [SP,#0x20]
     //stp     X6, X7, [SP,#0x30]
     //mrs     r0, cpsr
     mrs     x0, cpsr
-    str     x0, [sp, #0x18]
-    str     x30, [sp, #0x10]   
-    add     r30, sp, #0x20
-    str     r30, [sp, #0x8]    
-    ldr     x0, [sp]
+    str     x0, [sp, #0x10]
+    str     x30, [sp]   
+    add     x30, sp, #0x20
+    str     x30, [sp]    
+    ldr     x0, [sp, #0x18]
 
     
-    add     sp, sp, #0xe0
+    add     sp, sp, #0xf0
     stp     X0, X1, [SP]
     stp     X2, X3, [SP,#0x10]
     stp     X4, X5, [SP,#0x20]
@@ -36,14 +37,14 @@ _shellcode_start_s:
     stp     X22, X23, [SP,#0xb0]
     stp     X24, X25, [SP,#0xc0]
     stp     X26, X27, [SP,#0xd0]
-    str     x28, [SP, #0xe0]
+    stp     X28, X29, [SP,#0xe0]
 
 
     //push    {r0-r12}           
     mov     x0, sp
     ldr     x3, _hookstub_function_addr_s
     blr     x3
-    ldr     x0, [sp, #0xf8]
+    ldr     x0, [sp, #0x100]
     msr     cpsr, x0
 
     ldp     X0, X1, [SP]
@@ -60,14 +61,19 @@ _shellcode_start_s:
     ldp     X22, X23, [SP,#0xb0]
     ldp     X24, X25, [SP,#0xc0]
     ldp     X26, X27, [SP,#0xd0]
-    ldr     x28, [SP, #0xe0]
-    sub     sp, sp, #0xe0
+    ldp     X28, X29, [SP,#0xe0]
+    sub     sp, sp, #0xf0
 
     //ldmfd   sp!, {r0-r12}       
-    ldr     x30, [sp, #0x10]
-    ldr     x29, [sp, #0x8]
+    ldr     x30, [sp, #0x18]
+    ldr     sp, [sp, #0x8]
+    //ldr     x29, [sp, #0x8]
+
 
     //ldr     pc, _old_function_addr_s
+    stp     X1, X0, [SP, #-0x10]
+    ldr     x0, _old_function_addr_s
+    br      x0
     
 _hookstub_function_addr_s:
 .word 0xffffffff
