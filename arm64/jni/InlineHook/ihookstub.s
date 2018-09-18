@@ -57,7 +57,7 @@ _shellcode_start_s:
     sub     sp, sp, #0xf0
      
     ldr     x30, [sp, #0x18]
-    add     sp, sp, #0x8
+    add     sp, sp, #0x20
 
     stp     X1, X0, [SP, #-0x10]
     ldr     x0, _old_function_addr_s
