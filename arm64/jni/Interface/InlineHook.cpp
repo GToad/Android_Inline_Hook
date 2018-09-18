@@ -47,25 +47,13 @@ bool InlineHook(void *pHookAddr, void (*onCallBack)(struct pt_regs *))
     pstInlineHook->pHookAddr = pHookAddr;
     pstInlineHook->onCallBack = onCallBack;
 
-    //DEMO只很对ARM指令进行演示，更通用这里需要判断区分THUMB等指令
-    if(TEST_BIT0((uint32_t)pstInlineHook->pHookAddr)){ //thumb mode
-        LOGI("HookThumb Start.");
-        if(HookThumb(pstInlineHook) == false)
-        {
-            LOGI("HookThumb fail.");
-            delete pstInlineHook;
-            return bRet;
-        }
+    if(HookArm(pstInlineHook) == false)
+    {
+        LOGI("HookArm fail.");
+        delete pstInlineHook;
+        return bRet;
     }
-    else{   
-                                                 //arm mode
-        if(HookArm(pstInlineHook) == false)
-        {
-            LOGI("HookArm fail.");
-            delete pstInlineHook;
-            return bRet;
-        }
-    }
+
     
     gs_vecInlineHookInfo.push_back(pstInlineHook);
     return true;
@@ -138,9 +126,9 @@ void ModifyIBored()
     */
 
     //inline hook test3 thumb-2 hook
-    int target_offset = 0x43b8; //*想Hook的目标在目标so中的偏移*
-    bool is_target_thumb = true; //*目标是否是thumb模式？*
-    void* pModuleBaseAddr = GetModuleBaseAddr(-1, "libnative-lib.so"); //目标so的名称
+    int target_offset = 0x5f8; //*想Hook的目标在目标so中的偏移*
+    //bool is_target_thumb = true; //*目标是否是thumb模式？*
+    void* pModuleBaseAddr = GetModuleBaseAddr(-1, "libhellojni.so"); //目标so的名称
 
     if(pModuleBaseAddr == 0)
     {
@@ -148,8 +136,9 @@ void ModifyIBored()
         return;
     }
     
-    uint32_t uiHookAddr = (uint32_t)pModuleBaseAddr + target_offset; //真实Hook的内存地址
+    uint64_t uiHookAddr = (uint64_t)pModuleBaseAddr + target_offset; //真实Hook的内存地址
 
+/*
     if(is_target_thumb){ //之所以人来判断那是因为Native Hook之前肯定是要逆向分析一下的，那时候就能知道是哪种模式。而且自动识别arm和thumb比较麻烦。
         uiHookAddr++;
         LOGI("uiHookAddr is %X in thumb mode", uiHookAddr);
@@ -157,6 +146,7 @@ void ModifyIBored()
     else{
         LOGI("uiHookAddr is %X in arm mode", uiHookAddr);
     }
+    */
     
     InlineHook((void*)(uiHookAddr), EvilHookStubFunctionForIBored); //*第二个参数就是Hook想要插入的功能处理函数*
 }

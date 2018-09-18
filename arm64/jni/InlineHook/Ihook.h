@@ -16,7 +16,7 @@
 #endif
 
 #define OPCODEMAXLEN 12      //inline hook所需要的opcodes最大长度,arm为8，thumb为12/10（因为要补一个nop），所以这里取12，当arm的时候只memcpy 8btye就行了
-#define BACKUP_CODE_NUM_MAX 10  //尽管备份指令最多的可能是thumb-2下的6条thumb16，但是为了保险起见选择了10。
+#define BACKUP_CODE_NUM_MAX 5  //尽管备份指令最多的可能是thumb-2下的6条thumb16，但是为了保险起见选择了10。
 
 #define LOG_TAG "GToad"
 #define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, fmt, ##args);
@@ -45,9 +45,9 @@ typedef struct tagINLINEHOOKINFO{
     void (*onCallBack)(struct pt_regs *);       //回调函数，跳转过去的函数地址
     void ** ppOldFuncAddr;             //shellcode 中存放old function的地址
     BYTE szbyBackupOpcodes[OPCODEMAXLEN];    //原来的opcodes
-    int backUpLength; //备份代码的长度，arm模式下为8，thumb模式下为10或12
+    int backUpLength; //备份代码的长度，arm64模式下为20
     int backUpFixLengthList[BACKUP_CODE_NUM_MAX]; //保存
-    uint32_t *pNewEntryForOldFunction;
+    uint64_t *pNewEntryForOldFunction;
 } INLINE_HOOK_INFO;
 
 bool ChangePageProperty(void *pAddress, size_t size);
@@ -65,8 +65,6 @@ bool BuildOldFunction(INLINE_HOOK_INFO* pstInlineHook);
 bool RebuildHookTarget(INLINE_HOOK_INFO* pstInlineHook);
 
 extern bool HookArm(INLINE_HOOK_INFO* pstInlineHook);
-
-extern bool HookThumb(INLINE_HOOK_INFO* pstInlineHook);
 
 #endif
 
