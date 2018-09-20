@@ -53,6 +53,7 @@ void * GetModuleBaseAddr(pid_t pid, char* pszModuleName)
     unsigned long ulBaseValue = 0;
     char szMapFilePath[256] = {0};
     char szFileLineBuffer[1024] = {0};
+    LOGI("first fork(): I'am father pid=%d", getpid());
 
     LOGI("Pid is %d\n",pid);
 
@@ -71,14 +72,15 @@ void * GetModuleBaseAddr(pid_t pid, char* pszModuleName)
     {
         return (void *)ulBaseValue;
     }
+    LOGI("%d",pFileMaps);
 
     LOGI("Get map.\n");
 
     //循环遍历maps文件，找到相应模块，截取地址信息
     while (fgets(szFileLineBuffer, sizeof(szFileLineBuffer), pFileMaps) != NULL)
     {
-        //LOGI("%s\n",szFileLineBuffer);
-        //LOGI("%s\n",pszModuleName);
+        LOGI("%s\n",szFileLineBuffer);
+        LOGI("%s\n",pszModuleName);
         if (strstr(szFileLineBuffer, pszModuleName))
         {
             LOGI("%s\n",szFileLineBuffer);
