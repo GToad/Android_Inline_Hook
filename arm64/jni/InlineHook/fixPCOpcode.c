@@ -528,12 +528,12 @@ int fixPCOpcodeArm(void *fixOpcodes , INLINE_HOOK_INFO* pstInlineHook)
 
     while(1) // 在这个循环中，每次都处理一个thumb命令
     {
-        LOGI("-------------START----------------");
-        LOGI("currentOpcode is %x",*currentOpcode);
+        //LOGI("-------------START----------------");
+        //LOGI("currentOpcode is %x",*currentOpcode);
         
         offset = fixPCOpcodeArm32(pc, lr, *currentOpcode, tmpFixOpcodes, pstInlineHook);
         //LOGI("isConditionBcode : %d", isConditionBcode);
-        LOGI("offset : %d", offset);
+        //LOGI("offset : %d", offset);
         memcpy(fixOpcodes+fixPos, tmpFixOpcodes, offset);
         /*
         if (isConditionBcode==1) { // the first code is B??
@@ -575,8 +575,8 @@ int fixPCOpcodeArm(void *fixOpcodes , INLINE_HOOK_INFO* pstInlineHook)
         pc += sizeof(uint32_t);
 
         fixPos += offset;
-        LOGI("fixPos : %d", fixPos);
-        LOGI("--------------END-----------------");
+        //LOGI("fixPos : %d", fixPos);
+        //LOGI("--------------END-----------------");
 
         if (backUpPos < pstInlineHook->backUpLength)
         {

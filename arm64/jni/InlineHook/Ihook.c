@@ -108,11 +108,13 @@ void * GetModuleBaseAddr(pid_t pid, char* pszModuleName)
 bool InitArmHookInfo(INLINE_HOOK_INFO* pstInlineHook)
 {
     bool bRet = false;
-    uint64_t *currentOpcode = pstInlineHook->pHookAddr;
+    uint32_t *currentOpcode = pstInlineHook->pHookAddr;
 
     for(int i=0;i<BACKUP_CODE_NUM_MAX;i++){
         pstInlineHook->backUpFixLengthList[i] = -1;
     }
+    LOGI("pstInlineHook->szbyBackupOpcodes is at %x",pstInlineHook->szbyBackupOpcodes);
+
     
     if(pstInlineHook == NULL)
     {
@@ -124,8 +126,8 @@ bool InitArmHookInfo(INLINE_HOOK_INFO* pstInlineHook)
     
     memcpy(pstInlineHook->szbyBackupOpcodes, pstInlineHook->pHookAddr, pstInlineHook->backUpLength);
 
-    for(int i=0;i<2;i++){
-        currentOpcode += i;
+    for(int i=0;i<5;i++){
+        currentOpcode += 1; //GToad BUG
         LOGI("Arm64 Opcode to fix %d : %x",i,*currentOpcode);
         LOGI("Fix length : %d",lengthFixArm32(*currentOpcode));
         pstInlineHook->backUpFixLengthList[i] = lengthFixArm32(*currentOpcode);
@@ -253,9 +255,10 @@ bool BuildOldFunction(INLINE_HOOK_INFO* pstInlineHook)
 
     void *fixOpcodes;
     int fixLength;
+    LOGI("LIVE3.1");
 
     fixOpcodes = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
-    
+    LOGI("LIVE3.2");
     while(1)
     {
         if(pstInlineHook == NULL)
@@ -263,6 +266,7 @@ bool BuildOldFunction(INLINE_HOOK_INFO* pstInlineHook)
             LOGI("pstInlineHook is null");
             break;
         }
+        LOGI("LIVE3.3");
         
         //8个bytes存放原来的opcodes，另外8个bytes存放跳转回hook点下面的跳转指令
         void * pNewEntryForOldFunction = malloc(200);
@@ -271,17 +275,21 @@ bool BuildOldFunction(INLINE_HOOK_INFO* pstInlineHook)
             LOGI("new entry for old function malloc fail.");
             break;
         }
+        LOGI("LIVE3.4");
 
         pstInlineHook->pNewEntryForOldFunction = pNewEntryForOldFunction;
+        LOGI("%d",pNewEntryForOldFunction);
         
         if(ChangePageProperty(pNewEntryForOldFunction, 200) == false)
         {
             LOGI("change new entry page property fail.");
             break;
         }
+        LOGI("LIVE3.5");
         
         fixLength = fixPCOpcodeArm(fixOpcodes, pstInlineHook); //把第三部分的起始地址传过去
         memcpy(pNewEntryForOldFunction, fixOpcodes, fixLength);
+        LOGI("LIVE3.6");
         //memcpy(pNewEntryForOldFunction, pstInlineHook->szbyBackupOpcodes, 8);
         //填充跳转指令
         if(BuildArmJumpCode(pNewEntryForOldFunction + fixLength, pstInlineHook->pHookAddr + pstInlineHook->backUpLength) == false)
@@ -289,12 +297,15 @@ bool BuildOldFunction(INLINE_HOOK_INFO* pstInlineHook)
             LOGI("build jump opcodes for new entry fail.");
             break;
         }
+        LOGI("LIVE3.7");
         //填充shellcode里stub的回调地址
         *(pstInlineHook->ppOldFuncAddr) = pNewEntryForOldFunction;
+        LOGI("LIVE3.8");
         
         bRet = true;
         break;
     }
+    LOGI("LIVE3.9");
     
     return bRet;
 }
@@ -363,7 +374,7 @@ bool HookArm(INLINE_HOOK_INFO* pstInlineHook)
         LOGI("LIVE1");
 
         //LOGI("Init Arm HookInfo fail 1.");
-        //设置ARM下inline hook的基础信息
+        //第零步，设置ARM下inline hook的基础信息
         if(InitArmHookInfo(pstInlineHook) == false)
         {
             LOGI("Init Arm HookInfo fail.");
@@ -372,7 +383,7 @@ bool HookArm(INLINE_HOOK_INFO* pstInlineHook)
         LOGI("LIVE2");
         
         //LOGI("BuildStub fail 1.");
-        //构造stub，功能是保存寄存器状态，同时跳转到目标函数，然后跳转回原函数
+        //第二步，构造stub，功能是保存寄存器状态，同时跳转到目标函数，然后跳转回原函数
         //需要目标地址，返回stub地址，同时还有old指针给后续填充 
         if(BuildStub(pstInlineHook) == false)
         {
@@ -382,18 +393,18 @@ bool HookArm(INLINE_HOOK_INFO* pstInlineHook)
         LOGI("LIVE3");
         
         //LOGI("BuildOldFunction fail 1.");
-        //负责重构原函数头，功能是修复指令，构造跳转回到原地址下
+        //第四步，负责重构原函数头，功能是修复指令，构造跳转回到原地址下
         //需要原函数地址
-        /*
+        
         if(BuildOldFunction(pstInlineHook) == false)
         {
             LOGI("BuildOldFunction fail.");
             break;
         }
         LOGI("LIVE4");
-        */
+        
         //LOGI("RebuildHookAddress fail 1.");
-        //负责重写原函数头，功能是实现inline hook的最后一步，改写跳转
+        //第一步，负责重写原函数头，功能是实现inline hook的最后一步，改写跳转
         //需要cacheflush，防止崩溃
         if(RebuildHookTarget(pstInlineHook) == false)
         {

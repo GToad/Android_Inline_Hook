@@ -123,7 +123,7 @@ bool InitArmHookInfo(INLINE_HOOK_INFO* pstInlineHook)
     memcpy(pstInlineHook->szbyBackupOpcodes, pstInlineHook->pHookAddr, pstInlineHook->backUpLength);
 
     for(int i=0;i<2;i++){
-        currentOpcode += i;
+        currentOpcode += 1;
         LOGI("Arm32 Opcode to fix %d : %x",i,*currentOpcode);
         LOGI("Fix length : %d",lengthFixArm32(*currentOpcode));
         pstInlineHook->backUpFixLengthList[i] = lengthFixArm32(*currentOpcode);
