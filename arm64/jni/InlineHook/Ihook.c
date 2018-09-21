@@ -79,8 +79,8 @@ void * GetModuleBaseAddr(pid_t pid, char* pszModuleName)
     //循环遍历maps文件，找到相应模块，截取地址信息
     while (fgets(szFileLineBuffer, sizeof(szFileLineBuffer), pFileMaps) != NULL)
     {
-        LOGI("%s\n",szFileLineBuffer);
-        LOGI("%s\n",pszModuleName);
+        //LOGI("%s\n",szFileLineBuffer);
+        //LOGI("%s\n",pszModuleName);
         if (strstr(szFileLineBuffer, pszModuleName))
         {
             LOGI("%s\n",szFileLineBuffer);
@@ -198,14 +198,17 @@ bool BuildStub(INLINE_HOOK_INFO* pstInlineHook)
  */
 bool BuildArmJumpCode(void *pCurAddress , void *pJumpAddress)
 {
+    LOGI("LIVE4.3.1");
     bool bRet = false;
     while(1)
     {
+        LOGI("LIVE4.3.2");
         if(pCurAddress == NULL || pJumpAddress == NULL)
         {
             LOGI("address null.");
             break;
-        }        
+        }    
+        LOGI("LIVE4.3.3");    
         //LDR PC, [PC, #-4]
         //addr
         //LDR PC, [PC, #-4]对应的机器码为：0xE51FF004
@@ -217,19 +220,22 @@ bool BuildArmJumpCode(void *pCurAddress , void *pJumpAddress)
         //LDR X0, 4
         //BR X0
         //ADDR(64)
-        BYTE szLdrPCOpcodes[20] = {0xe1, 0x03, 0x3f, 0xa9, 0x20, 0x00, 0x00, 0x58, 0x00, 0x00, 0x1f, 0xd6};
+        BYTE szLdrPCOpcodes[20] = {0xe1, 0x03, 0x3f, 0xa9, 0x40, 0x00, 0x00, 0x58, 0x00, 0x00, 0x1f, 0xd6};
         //将目的地址拷贝到跳转指令缓存位置
         memcpy(szLdrPCOpcodes + 12, &pJumpAddress, 8);
+        LOGI("LIVE4.3.4");
         
         //将构造好的跳转指令刷进去
         memcpy(pCurAddress, szLdrPCOpcodes, 20);
+        LOGI("LIVE4.3.5");
         //__flush_cache(*((uint32_t*)pCurAddress), 20);
-        __builtin___clear_cache (*((uint64_t*)pCurAddress), *((uint64_t*)(pCurAddress+20)));
+        //__builtin___clear_cache (*((uint64_t*)pCurAddress), *((uint64_t*)(pCurAddress+20)));
         //cacheflush(*((uint32_t*)pCurAddress), 20, 0);
-        
+        LOGI("LIVE4.3.6");
         bRet = true;
         break;
     }
+    LOGI("LIVE4.3.7");
     return bRet;
 }
 
@@ -306,26 +312,31 @@ bool RebuildHookTarget(INLINE_HOOK_INFO* pstInlineHook)
     
     while(1)
     {
+        LOGI("LIVE4.1");
         if(pstInlineHook == NULL)
         {
             LOGI("pstInlineHook is null");
             break;
         }
+        LOGI("LIVE4.2");
         //修改原位置的页属性，保证可写
         if(ChangePageProperty(pstInlineHook->pHookAddr, 8) == false)
         {
             LOGI("change page property error.");
             break;
         }
+        LOGI("LIVE4.3");
         //填充跳转指令
         if(BuildArmJumpCode(pstInlineHook->pHookAddr, pstInlineHook->pStubShellCodeAddr) == false)
         {
             LOGI("build jump opcodes for new entry fail.");
             break;
         }
+        LOGI("LIVE4.4");
         bRet = true;
         break;
     }
+    LOGI("LIVE4.5");
     
     return bRet;
 }
@@ -349,6 +360,7 @@ bool HookArm(INLINE_HOOK_INFO* pstInlineHook)
             LOGI("pstInlineHook is null.");
             break;
         }
+        LOGI("LIVE1");
 
         //LOGI("Init Arm HookInfo fail 1.");
         //设置ARM下inline hook的基础信息
@@ -357,6 +369,7 @@ bool HookArm(INLINE_HOOK_INFO* pstInlineHook)
             LOGI("Init Arm HookInfo fail.");
             break;
         }
+        LOGI("LIVE2");
         
         //LOGI("BuildStub fail 1.");
         //构造stub，功能是保存寄存器状态，同时跳转到目标函数，然后跳转回原函数
@@ -366,16 +379,19 @@ bool HookArm(INLINE_HOOK_INFO* pstInlineHook)
             LOGI("BuildStub fail.");
             break;
         }
+        LOGI("LIVE3");
         
         //LOGI("BuildOldFunction fail 1.");
         //负责重构原函数头，功能是修复指令，构造跳转回到原地址下
         //需要原函数地址
+        /*
         if(BuildOldFunction(pstInlineHook) == false)
         {
             LOGI("BuildOldFunction fail.");
             break;
         }
-        
+        LOGI("LIVE4");
+        */
         //LOGI("RebuildHookAddress fail 1.");
         //负责重写原函数头，功能是实现inline hook的最后一步，改写跳转
         //需要cacheflush，防止崩溃
@@ -384,9 +400,12 @@ bool HookArm(INLINE_HOOK_INFO* pstInlineHook)
             LOGI("RebuildHookAddress fail.");
             break;
         }
+        LOGI("LIVE5");
+        
         bRet = true;
         break;
     }
+    LOGI("LIVE6");
 
     return bRet;
 }

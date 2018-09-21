@@ -7,13 +7,13 @@
 
 _shellcode_start_s:
 
-    add     sp, sp, #0x20
+    sub     sp, sp, #0x20
 
     mrs     x0, NZCV
     str     x0, [sp, #0x10]
     str     x30, [sp]   
     add     x30, sp, #0x20
-    str     x30, [sp]    
+    str     x30, [sp, #0x8]    
     ldr     x0, [sp, #0x18]
 
     add     sp, sp, #0xf0
@@ -56,7 +56,7 @@ _shellcode_start_s:
     ldp     X28, X29, [SP,#0xe0]
     sub     sp, sp, #0xf0
      
-    ldr     x30, [sp, #0x18]
+    ldr     x30, [sp]
     add     sp, sp, #0x20
 
     stp     X1, X0, [SP, #-0x10]

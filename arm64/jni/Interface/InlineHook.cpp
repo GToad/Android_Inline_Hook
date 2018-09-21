@@ -108,7 +108,7 @@ void EvilHookStubFunctionForIBored(user_pt_regs *regs) //²ÎÊıregs¾ÍÊÇÖ¸ÏòÕ»ÉÏµÄÒ
 {
     LOGI("In Evil Hook Stub.");
     //regs->uregs[2] = 0x333; //regs->uregs[0]=0x333
-    regs->regs[0]=0x333;
+    regs->regs[9]=0x333;
 }
 
 /**
@@ -126,7 +126,7 @@ void ModifyIBored()
     */
 
     //inline hook test3 thumb-2 hook
-    int target_offset = 0x5f8; //*ÏëHookµÄÄ¿±êÔÚÄ¿±êsoÖĞµÄÆ«ÒÆ*
+    int target_offset = 0x600; //*ÏëHookµÄÄ¿±êÔÚÄ¿±êsoÖĞµÄÆ«ÒÆ*
     //bool is_target_thumb = true; //*Ä¿±êÊÇ·ñÊÇthumbÄ£Ê½£¿*
     void* pModuleBaseAddr = GetModuleBaseAddr(-1, "libhellojni.so"); //Ä¿±êsoµÄÃû³Æ
 
