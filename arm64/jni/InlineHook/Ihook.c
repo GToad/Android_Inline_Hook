@@ -279,7 +279,7 @@ bool BuildOldFunction(INLINE_HOOK_INFO* pstInlineHook)
         LOGI("LIVE3.4");
 
         pstInlineHook->pNewEntryForOldFunction = pNewEntryForOldFunction;
-        LOGI("%d",pNewEntryForOldFunction);
+        LOGI("%x",pNewEntryForOldFunction);
         
         if(ChangePageProperty(pNewEntryForOldFunction, 200) == false)
         {
