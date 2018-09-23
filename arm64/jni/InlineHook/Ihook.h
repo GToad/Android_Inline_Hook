@@ -18,7 +18,7 @@
 #endif
 
 #define OPCODEMAXLEN 24      //inline hook所需要的opcodes最大长度,arm64为20
-#define BACKUP_CODE_NUM_MAX 6  //尽管备份指令最多的可能是thumb-2下的6条thumb16，但是为了保险起见选择了10。
+#define BACKUP_CODE_NUM_MAX 6  //尽管备份原程序6条arm64指令。
 
 #define LOG_TAG "GToad"
 #define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, fmt, ##args);
@@ -37,10 +37,7 @@ extern unsigned long _shellcode_start_s;
 extern unsigned long _shellcode_end_s;
 extern unsigned long _hookstub_function_addr_s;
 extern unsigned long _old_function_addr_s;
-extern unsigned long _shellcode_start_s_thumb;
-extern unsigned long _shellcode_end_s_thumb;
-extern unsigned long _hookstub_function_addr_s_thumb;
-extern unsigned long _old_function_addr_s_thumb;
+
 
 //hook点信息
 typedef struct tagINLINEHOOKINFO{
