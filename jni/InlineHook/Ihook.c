@@ -552,7 +552,7 @@ bool RebuildHookTarget(INLINE_HOOK_INFO* pstInlineHook)
             break;
         }
         //修改原位置的页属性，保证可写
-        if(ChangePageProperty(pstInlineHook->pHookAddr, 8) == false)
+        if(ChangePageProperty(pstInlineHook->pHookAddr, 12) == false)
         {
             LOGI("change page property error.");
             break;

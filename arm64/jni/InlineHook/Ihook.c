@@ -122,11 +122,11 @@ bool InitArmHookInfo(INLINE_HOOK_INFO* pstInlineHook)
         return bRet;
     }
 
-    pstInlineHook->backUpLength = 20;
+    pstInlineHook->backUpLength = 24;
     
     memcpy(pstInlineHook->szbyBackupOpcodes, pstInlineHook->pHookAddr, pstInlineHook->backUpLength);
 
-    for(int i=0;i<5;i++){
+    for(int i=0;i<6;i++){
         //currentOpcode += i; //GToad BUG
         LOGI("Arm64 Opcode to fix %d : %x",i,*currentOpcode);
         LOGI("Fix length : %d",lengthFixArm32(*currentOpcode));
@@ -220,16 +220,21 @@ bool BuildArmJumpCode(void *pCurAddress , void *pJumpAddress)
         //BYTE szLdrPCOpcodes[8] = {0x04, 0xF0, 0x1F, 0xE5};
 
         //STP X1, X0, [SP, #-0x10]
-        //LDR X0, 4
+        //LDR X0, 8
         //BR X0
         //ADDR(64)
-        BYTE szLdrPCOpcodes[20] = {0xe1, 0x03, 0x3f, 0xa9, 0x40, 0x00, 0x00, 0x58, 0x00, 0x00, 0x1f, 0xd6};
+        //LDR X0, [SP, -0x8]
+        BYTE szLdrPCOpcodes[24] = {0xe1, 0x03, 0x3f, 0xa9, 0x40, 0x00, 0x00, 0x58, 0x00, 0x00, 0x1f, 0xd6};
         //将目的地址拷贝到跳转指令缓存位置
         memcpy(szLdrPCOpcodes + 12, &pJumpAddress, 8);
+        szLdrPCOpcodes[20] = 0xE0;
+        szLdrPCOpcodes[21] = 0x83;
+        szLdrPCOpcodes[22] = 0x5F;
+        szLdrPCOpcodes[23] = 0xF8;
         LOGI("LIVE4.3.4");
         
         //将构造好的跳转指令刷进去
-        memcpy(pCurAddress, szLdrPCOpcodes, 20);
+        memcpy(pCurAddress, szLdrPCOpcodes, 24);
         LOGI("LIVE4.3.5");
         //__flush_cache(*((uint32_t*)pCurAddress), 20);
         //__builtin___clear_cache (*((uint64_t*)pCurAddress), *((uint64_t*)(pCurAddress+20)));
@@ -332,7 +337,7 @@ bool RebuildHookTarget(INLINE_HOOK_INFO* pstInlineHook)
         }
         LOGI("LIVE4.2");
         //修改原位置的页属性，保证可写
-        if(ChangePageProperty(pstInlineHook->pHookAddr, 8) == false)
+        if(ChangePageProperty(pstInlineHook->pHookAddr, 24) == false)
         {
             LOGI("change page property error.");
             break;

@@ -17,8 +17,8 @@
 #define BYTE unsigned char
 #endif
 
-#define OPCODEMAXLEN 20      //inline hook所需要的opcodes最大长度,arm64为20
-#define BACKUP_CODE_NUM_MAX 5  //尽管备份指令最多的可能是thumb-2下的6条thumb16，但是为了保险起见选择了10。
+#define OPCODEMAXLEN 24      //inline hook所需要的opcodes最大长度,arm64为20
+#define BACKUP_CODE_NUM_MAX 6  //尽管备份指令最多的可能是thumb-2下的6条thumb16，但是为了保险起见选择了10。
 
 #define LOG_TAG "GToad"
 #define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, fmt, ##args);
