@@ -356,7 +356,7 @@ int fixPCOpcodeArm(void *fixOpcodes , INLINE_HOOK_INFO* pstInlineHook)
         }
     }
 
-    LOGI("Something wrong in arm fixing...");
+    LOGI("Something wrong in arm64 fixing...");
 
     return 0;
 }
