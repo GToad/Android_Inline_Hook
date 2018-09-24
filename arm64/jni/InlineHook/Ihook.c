@@ -298,7 +298,7 @@ bool BuildOldFunction(INLINE_HOOK_INFO* pstInlineHook)
         LOGI("LIVE3.6");
         //memcpy(pNewEntryForOldFunction, pstInlineHook->szbyBackupOpcodes, 8);
         //Ìî³äÌø×ªÖ¸Áî
-        if(BuildArmJumpCode(pNewEntryForOldFunction + fixLength, pstInlineHook->pHookAddr + pstInlineHook->backUpLength) == false)
+        if(BuildArmJumpCode(pNewEntryForOldFunction + fixLength, pstInlineHook->pHookAddr + pstInlineHook->backUpLength - 4) == false)
         {
             LOGI("build jump opcodes for new entry fail.");
             break;
