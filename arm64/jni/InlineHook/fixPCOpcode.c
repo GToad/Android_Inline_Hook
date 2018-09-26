@@ -398,25 +398,32 @@ int fixPCOpcodeArm64(uint64_t pc, uint64_t lr, uint32_t instruction, uint32_t *t
         return 4*trampoline_pos;
     }
     if (type == ADRP_ARM64) {
-		//LDR Rn, 4
+		//LDR Rn, 8
+		//B 12
 		//PC+imm*4096
         LOGI("ADRP_ARM64");
 		uint32_t imm21;
 		uint64_t value;
 		uint32_t rd;
 		imm21 = ((instruction & 0xFFFFE0)>>3) + ((instruction & 0x60000000)>>29);
-		value = pc + 4096*imm21;
+		value = (pc & 0xfffffffffffff000) + 4096*imm21;
 		if((imm21 & 0x100000)==0x100000)
 		{
 			LOGI("NEG");
-			value = pc - 4096 * (0x1fffff - imm21 + 1);
+			value = (pc & 0xfff) - 4096 * (0x1fffff - imm21 + 1);
 		}
-		LOGI("value : %x",value);
+		LOGI("pc    : %lx",pc);
+		LOGI("imm21 : %x",imm21);
+		LOGI("value : %lx",value);
+		LOGI("valueh : %x",(uint32_t)(value >> 32));
+		LOGI("valuel : %x",(uint32_t)(value & 0xffffffff));
 		
 		rd = instruction & 0x1f;
-		trampoline_instructions[trampoline_pos++] = 0x58000020+rd; // ldr rd, 4
-		trampoline_instructions[trampoline_pos++] = (uint32_t)(value >> 32);
+		trampoline_instructions[trampoline_pos++] = 0x58000040+rd; // ldr rd, 8
+		trampoline_instructions[trampoline_pos++] = 0x14000003; // b 12
 		trampoline_instructions[trampoline_pos++] = (uint32_t)(value & 0xffffffff);
+		trampoline_instructions[trampoline_pos++] = (uint32_t)(value >> 32);
+		
 
         return 4*trampoline_pos;
     }

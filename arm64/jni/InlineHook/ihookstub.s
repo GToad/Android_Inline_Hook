@@ -16,7 +16,7 @@ _shellcode_start_s:
     str     x30, [sp, #0x8]    
     ldr     x0, [sp, #0x18]
 
-    add     sp, sp, #0xf0
+    sub     sp, sp, #0xf0
     stp     X0, X1, [SP]
     stp     X2, X3, [SP,#0x10]
     stp     X4, X5, [SP,#0x20]
@@ -36,7 +36,7 @@ _shellcode_start_s:
     mov     x0, sp
     ldr     x3, 8
     b       12
-    
+
 _hookstub_function_addr_s:
 .double 0xffffffffffffffff
 
@@ -59,7 +59,7 @@ _hookstub_function_addr_s:
     ldp     X24, X25, [SP,#0xc0]
     ldp     X26, X27, [SP,#0xd0]
     ldp     X28, X29, [SP,#0xe0]
-    sub     sp, sp, #0xf0
+    add     sp, sp, #0xf0
      
     ldr     x30, [sp]
     add     sp, sp, #0x20
