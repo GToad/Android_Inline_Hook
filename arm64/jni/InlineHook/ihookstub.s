@@ -34,7 +34,12 @@ _shellcode_start_s:
     stp     X28, X29, [SP,#0xe0]
           
     mov     x0, sp
-    ldr     x3, _hookstub_function_addr_s
+    ldr     x3, 8
+    b       12
+    
+_hookstub_function_addr_s:
+.double 0xffffffffffffffff
+
     blr     x3
     ldr     x0, [sp, #0x100]
     msr     NZCV, x0
@@ -60,16 +65,17 @@ _shellcode_start_s:
     add     sp, sp, #0x20
 
     stp     X1, X0, [SP, #-0x10]
-    ldr     x0, _old_function_addr_s
+    ldr     x0, 8
+    b       12
+
+_old_function_addr_s:
+.double 0xffffffffffffffff
+
     br      x0
 
 
     
-_hookstub_function_addr_s:
-.word 0xffffffff
 
-_old_function_addr_s:
-.word 0xffffffff
 
 _shellcode_end_s:
 

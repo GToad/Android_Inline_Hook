@@ -176,14 +176,19 @@ bool BuildStub(INLINE_HOOK_INFO* pstInlineHook)
         }
 
         //设置跳转到外部stub函数去
+        LOGI("_hookstub_function_addr_s : %lx",p_hookstub_function_addr_s);
         void **ppHookStubFunctionAddr = pNewShellCode + (p_hookstub_function_addr_s - p_shellcode_start_s);
         *ppHookStubFunctionAddr = pstInlineHook->onCallBack;
+        LOGI("ppHookStubFunctionAddr : %lx",ppHookStubFunctionAddr);
+        LOGI("*ppHookStubFunctionAddr : %lx",*ppHookStubFunctionAddr);
         
         //备份外部stub函数运行完后跳转的函数地址指针，用于填充老函数的新地址
         pstInlineHook->ppOldFuncAddr  = pNewShellCode + (p_old_function_addr_s - p_shellcode_start_s);
             
         //填充shellcode地址到hookinfo中，用于构造hook点位置的跳转指令
         pstInlineHook->pStubShellCodeAddr = pNewShellCode;
+
+        
 
         bRet = true;
         break;
