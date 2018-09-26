@@ -9,6 +9,7 @@ If you can read Chinese or wanna see more picture, I've wrote some articles abou
 1. [Android Inline Hook Practice](https://gtoad.github.io/2018/07/06/Android-Native-Hook-Practice/)
 2. [Opcode Fix In Android Inline Hook](https://gtoad.github.io/2018/07/13/Android-Inline-Hook-Fix/)
 3. [An Introduction to Android Native Hook](https://gtoad.github.io/2018/07/05/Android-Native-Hook/)
+4. [Android Inline Hook ARM64 Practice](https://gtoad.github.io/2018/09/20/Android-Native-Hook-Practice-Arm64/)
 
 # Articles in English
 
@@ -39,7 +40,7 @@ I've make some examples in other repo, it includes code and the target APK file.
 
 # ARM64
 
-ARM64 has been finished ! I put it in another [repo](https://github.com/GToad/Android_Inline_Hook_ARM64.git) to keep clean.
+ARM64 has been finished ! I put it in another [Android Inline Hook ARM64](https://github.com/GToad/Android_Inline_Hook_ARM64.git) to keep clean.
 
 # Contact
 
