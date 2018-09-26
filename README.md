@@ -17,6 +17,13 @@ I've received several e-mails and all the questions in them have been written in
 
 1. [Android Inline Hook Practice EN](https://gtoad.github.io/2018/08/03/Android-Native-Hook-Practice-EN/)
 
+# Features
+
+1. No ptrace -- So the anti-debug tech won't effect on this tool.
+2. Auto run -- Just use Xposed or other tools to load it into the memory and it will do the native hook work.
+3. Pure inline hook -- No other imprint left so it's hard to anti.
+4. Flexible -- Fine docs for users to understand the code and change it on your own perpose.
+
 # How To Use
 
 The only thing you have to change is the code in `InlineHook.cpp`.
