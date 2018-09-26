@@ -23,6 +23,7 @@ I've received several e-mails and all the questions in them have been written in
 2. Auto run -- Just use Xposed or other tools to load it into the memory and it will do the native hook work.
 3. Pure inline hook -- No other imprint left so it's hard to anti.
 4. Flexible -- Fine docs for users to understand the code and change it on your own perpose.
+5. Active support -- Brand new so I'm still keen on fix the bugs and arm32/thumb-2/arm64 has been finished one by one.
 
 # How To Use
 
