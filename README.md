@@ -39,7 +39,7 @@ I've make some examples in other repo, it includes code and the target APK file.
 
 # ARM64
 
-Start to working. So the code in ./arm64 has not finished yet.
+ARM64 has been finished ! I put it in another [repo](https://github.com/GToad/Android_Inline_Hook_ARM64.git) to keep clean.
 
 # Contact
 
