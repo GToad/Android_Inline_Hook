@@ -19,7 +19,7 @@ I've received several e-mails and all the questions in them have been written in
 
 # Features
 
-1. No ptrace -- So the anti-debug tech won't effect on this tool.
+1. No ptrace -- So the anti-debug tech won't affect on this tool.
 2. Auto run -- Just use Xposed or other tools to load it into the memory and it will do the native hook work.
 3. Pure inline hook -- No other imprint left so it's hard to anti.
 4. Flexible -- Fine docs for users to understand the code and change it on your own perpose.
