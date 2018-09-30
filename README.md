@@ -41,9 +41,10 @@ After you finish the args above, just `ndk-build` and you will get your .so file
 
 # ARM32 Design
 
+`The ARM32 has code fix too, I just didn't show in this picture.`
+
 ![](https://gtoad.github.io/img/in-post/post-android-native-hook-practice/armhook.png)
 
-`The ARM32 has code fix too, I just didn't show in this picture.`
 
 # Thumb-2 Design
 
